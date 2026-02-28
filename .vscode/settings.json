@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "Practice_Q1.C": "cpp",
+        "Practice_Q0.C": "cpp",
+        "Q0_Hello_World.C": "cpp",
+        "Q1_Area_of_Square.C": "cpp",
+        "Q2_.C": "cpp",
+        "Q0_Area_of_Square.C": "cpp",
+        "Area_of_CircleQ2_.C": "cpp",
+        "Q2_Area_of_Circle.C": "cpp",
+        "Q3_Type_Conversion.C": "cpp",
+        "Q4_Operator_Precedence.C": "cpp",
+        "Q5_Divsible_by_2.C": "cpp",
+        "Q6_Even_or_Odd.C": "cpp",
+        "Q7_Valid_invalid_Syntax.C": "cpp",
+        "Q8_.C": "cpp",
+        "Q8_Print_True_or_False.C": "cpp"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}
