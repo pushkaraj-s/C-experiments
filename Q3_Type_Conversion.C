@@ -7,7 +7,7 @@ int main(){
 
     //Determine if value should be 1 ot 2
     int a = 1.999999999;
-    printf("Value of a = %d", a);
+    printf("Value of a = %d \n", a);
     
     return 0;
 }

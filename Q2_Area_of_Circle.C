@@ -6,7 +6,7 @@ int main() {
     printf("Input radious of circle = ");
     scanf("%f", &radious);
 
-    printf("Area of circle = %f", 3.14*radious*radious);
+    printf("Area of circle = %f \n", 3.14*radious*radious);
 
    return 0;
 }
