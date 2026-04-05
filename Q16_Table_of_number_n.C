@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 int main(){
-
+	//Write a program which prints table of number input by user.
 	int n;
 	printf("Enter a Number: ");
 	scanf("%d", &n);
