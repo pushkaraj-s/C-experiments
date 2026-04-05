@@ -3,7 +3,6 @@
 //Sum of n natural numbers using recursion
 
 int sum(int n);
-int sumN = 0;
 
 int main(){
     
@@ -13,9 +12,11 @@ int main(){
 
 int sum(int n){
     
-    if(n == 0){
-        return sumN;
+    if(n == 1){
+        return 1;
     }
-    sumN = sumN + n;
-    sum(n-1);
+    int sumNm1 = sum(n-1); //sum of 1 to n
+    int sumN = sumNm1 + n;
+    return sumN;
+
 }
