@@ -12,5 +12,5 @@ int main(){
         printf("Number is not divisible by 2");
     }
 
-return 0;
+    return 0;
 }

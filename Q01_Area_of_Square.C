@@ -10,5 +10,5 @@ int main(){
     //printf("Area of Square is:  %f \n", 3.14*side*side);
     //For Area of circle
 
-return 0;
+    return 0;
 }

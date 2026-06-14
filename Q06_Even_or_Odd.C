@@ -7,7 +7,7 @@ This is a same code from Problem 5, only print statemetns are required to be cha
 
 int main(){
     float x;
-//Even if we get float value from user, we need to convert it to int before using '%'(mod).
+    //Even if we get float value from user, we need to convert it to int before using '%'(mod).
 
     printf("Enter a number = ");
     scanf("%f", &x);
@@ -21,5 +21,5 @@ int main(){
         printf("Number is Odd");
     }
 
-return 0;
+    return 0;
 }

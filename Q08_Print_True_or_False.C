@@ -26,4 +26,6 @@ int main(){
 	scanf("%d", &Number);
 
    	printf("%d \n", Number > 9 && Number < 100);
+
+	return 0;
 }

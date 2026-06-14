@@ -10,5 +10,5 @@ int main(){
 
     4) char stars = '**'  -> invalid // Only one char is allowed to store in char data type, even space after first * will give error.
 
-return 0;
+    return 0;
 }

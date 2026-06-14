@@ -3,6 +3,7 @@
 int main() {
 
     float radious = 0;
+    
     printf("Input radious of circle = ");
     scanf("%f", &radious);
 
