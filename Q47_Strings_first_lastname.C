@@ -20,3 +20,4 @@ void printString(char arr[]){
     }
     printf("\n");
 }
+
