@@ -33,6 +33,26 @@
     #Syntax: 
     strcmp(str1, str2);
 
+    0 -> Both strings are equal.
+    +ve value -> First string is greater than the second string.
+    -ve value -> First string is less than the second string.
+
+    This function returns on integer value.
+    Banana                      Apple
+    |                             |
+    66                            65         (ASCII values)
+
+    Banana is greater than Apple in terms of ASCII values.
+    66-65 => +1, positive value returned.
+
+    Example:
+    char str1[] = "Banana";
+    char str2[] = "Apple";
+    int result = strcmp(str1, str2);
+    printf("Result: %d\n", result);
+
+    Output: 1
+
 
 
 
