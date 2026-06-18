@@ -2,7 +2,7 @@
 
 int main(){
     
-    //Take string inute from user using %c
+    //Take string inpute from user using %c
     char str[100];
     char ch;
     int i = 1;
