@@ -11,6 +11,8 @@
  void printInfo(add temp);
  
  int main(){
+
+   //Write a program to store and print address of 5 people using structures
     
     add a1 = {123, 5524, "Fremont", "California"};
     add a2 = {345, 3928, "Santa clara", "California"};
