@@ -1,4 +1,5 @@
 /* Theory:
+
 FILE: Container in a storage device to store data.
 
 - Files are used to persist the data
