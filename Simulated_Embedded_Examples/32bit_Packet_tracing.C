@@ -58,7 +58,7 @@ bool parsePacket(uint32_t packet){
     m1.errCode    = (uint8_t)packet & 0xFFu;
     
     // Error verification
-    if(m1->errCode != 0){
+    if(m1.errCode != 0){
         return false;
     }
     
@@ -71,7 +71,7 @@ bool parsePacket(uint32_t packet){
         message m[i];
         //Parse all letters one by one
         uint16_t letter = (uint16_t)(packet >> 4) & 0xFFFFu;
-        
+
         fileName[i] = letter;
     }
     
@@ -82,7 +82,7 @@ bool parsePacket(uint32_t packet){
 
 bool CreateFile(bool permission, char* fileName){
     if(permission == 1){
-        printf("File "%s" is created, fileName);
+        printf("File %s is created, &fileName");
         return true;
     } else if(permission == 0){
         printf("File creation permission Denied!");
