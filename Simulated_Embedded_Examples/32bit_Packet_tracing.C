@@ -59,33 +59,35 @@ static void reset_receiver_state(void){
 
 // --- Core entry point called one-at-a-time packet arrives
 
-typedef struct{
-    uint8_t msgID;
-    uint8_t numPack;
-    uint8_t seqNum;
-    uint8_t permission;
-    uint8_t errCode;
-    uint16_t data;
-} message;
-
-char fileName[MAX_LETTERS];
-
-uint32_t packet = 0x00200E650; // Example packet to be parsed
-
-bool parsePacket(uint32_t packet){
+void process_Packet(uint32_t packet){
     // Bit manipulation to extract each section of a single packet
     
-    message m1;
-    m1.msgID      = (uint8_t)(packet >> 30) & 0x3u; // msgID: 0000 & 0011 = 0000
-    m1.numPack    = (uint8_t)(packet >> 27) & 0x7u; // numPack: 0000 & 0111 = 0000
-    m1.seqNum     = (uint8_t)(packet >> 24) & 0x7u;
-    m1.permission = (uint8_t)(packet >> 20) & 0xFu;
-    m1.data       = (uint16_t)(packet >> 4) & 0xFFFFu; // (0010 1110 0110 0101) & (1111 1111 1111 1111)
-    m1.errCode    = (uint8_t)packet & 0xFFu;
+    uint8_t msg_id        = (uint8_t)((packet >> 30) & 0x3u);
+    uint8_t num_packets   = (uint8_t)((packet >> 27) & 0x7u);
+    uint8_t seq_num       = (uint8_t)((packet >> 24) & 0x7u);
+    uint8_t permissions   = (uint8_t)((packet >> 20) & 0xFu);
+    uint16_t filename_seg = (uint16_t)((packet >> 4) & 0xFFFFu);
+    uint8_t error_code    = (uint8_t)(packet & 0xFu);
+    
     
     // Error verification
-    if(m1->errCode != 0){
+    if(error_code != 0){
+        // Drop bad frame; Systems choice to reset tracking state or ignore
         return false;
+    }
+    
+    // Lifecycle Initialization & Stream Validation
+    if(seq_num == 0){
+        reset_receiver_state();
+        state.expected_msg_id = msg_id;
+        state.total_packets = num_packets;
+        state.permissions = permissions;
+        state.is_active_session = true;
+    } else {
+        // Validate context to confirm frame belongs to active sequence
+        if(!state.is_active_session || msg_id != state.expected_msg_id){
+            return; // Packet drop
+        }
     }
     
     size_t count = m1.numPack;
