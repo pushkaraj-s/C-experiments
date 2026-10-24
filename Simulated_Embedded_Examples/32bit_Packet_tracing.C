@@ -34,9 +34,6 @@
 #define MAX_PACKETS 8 //3-bits in Num Pack can represent max 8 values
 #define MAX_LETTERS 16 // Each packet has 2 letter, including NULL at end I can receive max 16 chars
 
-// Mock declration of system hook provided by CoderPad
-void create_file(const char* Filename, uint8_t permissions);
-
 // --- Stateful Receiver Architecture ---
 typedef struct{
     uint8_t expected_msg_id;
@@ -56,6 +53,16 @@ static ReceiverState state = {0};
 
 static void reset_receiver_state(void){
     memset(&state, 0, sizeof(ReceiverState));
+}
+
+bool CreateFile(const char* filename, bool permission){
+    if (permission) {
+        printf("File %s is created successfully.\n", filename);
+        return true;
+    } else {
+        printf("File creation permission denied!\n");
+        return false;
+    }
 }
 
 // --- Core entry point called one-at-a-time packet arrives
@@ -120,33 +127,54 @@ bool process_Packet(uint32_t packet){
         state.filename_buffer[max_possible_len] = '\0';
         
         // Pass complete tracking dataset forward to target OS handler
-        create_file(state.filename_buffer, state.permissions);
+        CreateFile(state.filename_buffer, state.permissions);
         
         // Terminate contect lifecycle tracker cleanly
         reset_receiver_state();
     }
-
-
-bool CreateFile(char* filename, bool permission){
-    if(permission == 1){
-        printf("File %s is created", filename);
-        return true;
-    } else if(permission == 0){
-        printf("File creation permission Denied!");
-        return false;
-    } else {
-        printf("Error occurred!");
-    }
-    return false;
+    return true;
 }
+
+/* --- Packet Builder for Testing --- */
+
+uint32_t build_packet(
+    uint8_t msg_id,
+    uint8_t num_packets,
+    uint8_t seq_num,
+    uint8_t permissions,
+    uint16_t filename_seg,
+    uint8_t error_code)
+{
+    uint8_t encoded_num_packets =
+        (num_packets == MAX_PACKETS) ? 0 : num_packets;
+    return ((uint32_t)(msg_id & 0x3u) << 30)
+         | ((uint32_t)(encoded_num_packets & 0x7u) << 27)
+         | ((uint32_t)(seq_num & 0x7u) << 24)
+         | ((uint32_t)(permissions & 0xFu) << 20)
+         | ((uint32_t)filename_seg << 4)
+         | (uint32_t)(error_code & 0xFu);
+}
+
 
 int main(){
     
-    bool valid = process_Packet(packet);
-    if(valid == false){
-        return -1;
-    }
+    uint32_t packets[4];
     
+    // Filename: EMBEDDED
+    packets[0] = build_packet(1, 4, 0, 6, 0x454D, 0); // EM
+    packets[1] = build_packet(1, 4, 2, 6, 0x4444, 0); // DD
+    packets[2] = build_packet(1, 4, 1, 6, 0x4245, 0); // BE
+    packets[3] = build_packet(1, 4, 3, 6, 0x4544, 0); // ED
+
+    for (int i = 0; i < 4; i++) {
+    printf("\n================================\n");
+    printf("Receiving packet %d of 4\n", i + 1);
+    bool valid = process_Packet(packets[i]);
+    if (state.is_active_session) {
+        printf("Packet accepted: %s\n", valid ? "YES" : "NO");
+    }
+}
+
     return 0;
 }
 
