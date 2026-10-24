@@ -30,8 +30,34 @@
 //   0  0    0  1  0    0  0  0   0  0   0  1   4 E  6 5   0 0 0 0 
 //   0  0    0  1  0    0  0  1   0  0   0  1   7 7  0 0   0 0 0 0 
 
-#define MAX_MESSAGE_PACKETS 8 //3-bits in Num Pack can represent max 8 values
+#define MAX_PACKETS 8 //3-bits in Num Pack can represent max 8 values
 #define MAX_LETTERS 16 // Each packet has 2 letter, including NULL at end I can receive max 16 chars
+
+// Mock declration of system hook provided by CoderPad
+void create_file9const char* Filename, uint8_t permissions);
+
+// --- Stateful Receiver Architecture ---
+typedef struct{
+    uint8_t expected_msg_id;
+    uint8_t total_packets;
+    uint8_t permissions;
+    uint8_t packets_received_count;
+    bool is_active_session;
+    
+    // Tracks slot fulfillment to hande out-oforder deliveries safely
+    bool slot_filled[MAX_PACKETS];
+    // Storage buffer for reconstructed characters
+    char filename_buffer[MAX_LETTERS];
+} ReceiverState;
+
+// Global context tracker
+static ReceiverState state = {0};
+
+static void reset_receiver_state(void){
+    memset(&state, 0, sozepf(ReceiverState));
+}
+
+// --- Core entry point called one-at-a-time packet arrives
 
 typedef struct{
     uint8_t msgID;
@@ -58,7 +84,7 @@ bool parsePacket(uint32_t packet){
     m1.errCode    = (uint8_t)packet & 0xFFu;
     
     // Error verification
-    if(m1.errCode != 0){
+    if(m1->errCode != 0){
         return false;
     }
     
@@ -71,7 +97,7 @@ bool parsePacket(uint32_t packet){
         message m[i];
         //Parse all letters one by one
         uint16_t letter = (uint16_t)(packet >> 4) & 0xFFFFu;
-
+        
         fileName[i] = letter;
     }
     
@@ -82,7 +108,7 @@ bool parsePacket(uint32_t packet){
 
 bool CreateFile(bool permission, char* fileName){
     if(permission == 1){
-        printf("File %s is created, &fileName");
+        printf("File "%s" is created, fileName);
         return true;
     } else if(permission == 0){
         printf("File creation permission Denied!");
