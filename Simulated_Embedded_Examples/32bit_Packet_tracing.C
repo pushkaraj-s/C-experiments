@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
@@ -34,7 +35,7 @@
 #define MAX_LETTERS 16 // Each packet has 2 letter, including NULL at end I can receive max 16 chars
 
 // Mock declration of system hook provided by CoderPad
-void create_file9const char* Filename, uint8_t permissions);
+void create_file(const char* Filename, uint8_t permissions);
 
 // --- Stateful Receiver Architecture ---
 typedef struct{
@@ -54,13 +55,13 @@ typedef struct{
 static ReceiverState state = {0};
 
 static void reset_receiver_state(void){
-    memset(&state, 0, sozepf(ReceiverState));
+    memset(&state, 0, sizeof(ReceiverState));
 }
 
 // --- Core entry point called one-at-a-time packet arrives
 
-void process_Packet(uint32_t packet){
-    // Bit manipulation to extract each section of a single packet
+bool process_Packet(uint32_t packet){
+    // 1. Bit manipulation to extract each section of a single packet
     
     uint8_t msg_id        = (uint8_t)((packet >> 30) & 0x3u);
     uint8_t num_packets   = (uint8_t)((packet >> 27) & 0x7u);
@@ -70,13 +71,13 @@ void process_Packet(uint32_t packet){
     uint8_t error_code    = (uint8_t)(packet & 0xFu);
     
     
-    // Error verification
+    // 2. Error verification
     if(error_code != 0){
         // Drop bad frame; Systems choice to reset tracking state or ignore
         return false;
     }
     
-    // Lifecycle Initialization & Stream Validation
+    // 3. Lifecycle Initialization & Stream Validation
     if(seq_num == 0){
         reset_receiver_state();
         state.expected_msg_id = msg_id;
@@ -86,31 +87,49 @@ void process_Packet(uint32_t packet){
     } else {
         // Validate context to confirm frame belongs to active sequence
         if(!state.is_active_session || msg_id != state.expected_msg_id){
-            return; // Packet drop
+            return false; // Packet drop
         }
     }
     
-    size_t count = m1.numPack;
-    
-    fileName[0] = (m1.data >> 8) & 0xFF; 
-    fileName[1] = (m1.data) & 0xFF;
-    
-    for(size_t i=0; i < count-1; i++){
-        message m[i];
-        //Parse all letters one by one
-        uint16_t letter = (uint16_t)(packet >> 4) & 0xFFFFu;
+    // 4. Fragment placement & Re-assembly
+    //Process segment if this packet slot has not already been filled (avoid duplicates)
+    if(!state.slot_filled[seq_num]){
+        // Extract 2 ASCII chars from 16-bit segment
+        char char1 = (char)((filename_seg >> 8) & 0xFFu);
+        char char2 = (char)(filename_seg & 0xFFu);
         
-        fileName[i] = letter;
+        // Put pieces into exact position boundries (2 bytes per sequence interval)
+        state.filename_buffer[seq_num * 2] = char1;
+        state.filename_buffer[(seq_num * 2) + 1] = char2;
+        
+        state.slot_filled[seq_num] = true;
+        state.packets_received_count++;
     }
     
-}
+    // 5. Final Assembly and Hook Execution trigger
+    if(state.packets_received_count == state.total_packets){
+        // Terminate string formatting to filter remaining padding safely
+        
+        // Calculate max bound filled based on total packets execute
+        int max_possible_len = state.total_packets * 2;
+        if(max_possible_len >= MAX_LETTERS){
+            max_possible_len = MAX_LETTERS -1;
+        }
+        
+        // Add string termination
+        state.filename_buffer[max_possible_len] = '\0';
+        
+        // Pass complete tracking dataset forward to target OS handler
+        create_file(state.filename_buffer, state.permissions);
+        
+        // Terminate contect lifecycle tracker cleanly
+        reset_receiver_state();
+    }
 
 
-
-
-bool CreateFile(bool permission, char* fileName){
+bool CreateFile(char* filename, bool permission){
     if(permission == 1){
-        printf("File "%s" is created, fileName);
+        printf("File %s is created", filename);
         return true;
     } else if(permission == 0){
         printf("File creation permission Denied!");
@@ -123,12 +142,10 @@ bool CreateFile(bool permission, char* fileName){
 
 int main(){
     
-    bool valid = parsePacket(packet);
-    if(valid == flase){
+    bool valid = process_Packet(packet);
+    if(valid == false){
         return -1;
     }
-    
-    CreateFile();
     
     return 0;
 }
