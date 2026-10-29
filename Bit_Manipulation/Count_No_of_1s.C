@@ -1,13 +1,7 @@
-
-// Online IDE - Code Editor, Compiler, Interpreter
-
 #include<stdio.h>
 
 int main()
-{
-    printf("Welcome to Online IDE!! Happy Coding :)\n");
-    
-    // We will practive bit manipulation here:
+{   
     unsigned char reg = 0xCC; //0b11001100;
     int count = 0;
     
