@@ -28,7 +28,7 @@ int main()
     Bit 7 is '1', Bit 6 is '0', Bit 5 is '1', etc.
     Ans:
     ***/
-    
+    unsigned char status_reg = 0b00001100;
     status_reg &= ~(1u << 5);
 
     /***
