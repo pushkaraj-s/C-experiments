@@ -101,7 +101,7 @@ int main()
     
     print_queue();
     
-    //Checking if circular indexing works
+    // Checking if circular indexing works
     // This confirms that your queue can reuse freed array 
     // positions without disturbing FIFO order.
     
