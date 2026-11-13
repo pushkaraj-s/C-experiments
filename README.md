@@ -20,7 +20,6 @@
 
 * [About](#about)
 * [Learning Roadmap](#learning-roadmap)
-* [Quick Start](#quick-start)
 * [Topic Explorer](#topic-explorer)
 * [Cheat Sheets](#cheat-sheets)
 * [Progress Tracker](#progress-tracker)
@@ -65,91 +64,6 @@ flowchart TB
     F --> M
     M --> S
 ```
-
-### Programs by topic
-
-```mermaid
-pie showData
-    title Programs per topic
-    "Basics and Conditionals" : 13
-    "Loops" : 11
-    "Functions and Recursion" : 11
-    "Pointers" : 5
-    "Arrays" : 6
-    "Strings" : 9
-    "Structures" : 6
-    "File I/O" : 5
-    "Dynamic Memory" : 6
-    "Data Structures" : 4
-    "Bit Manipulation" : 3
-    "Embedded Simulations" : 2
-```
-
----
-
-## Quick Start
-
-### Option 1: Run in the browser (no setup)
-
-Click the **Open in GitHub Codespaces** badge at the top. The default Codespaces image already includes `gcc`, so you can compile and run any file straight from the terminal.
-
-### Option 2: Run locally
-
-```bash
-git clone https://github.com/pushkaraj-s/C-experiments.git
-cd C-experiments
-
-# Compile and run a single program
-gcc -x c -std=c11 -Wall Q21_Factorial_of_Number.C -o factorial
-./factorial
-```
-
-> [!WARNING]
-> Most files in this repo use an uppercase **`.C`** extension. GCC and Clang treat `.C` as **C++** by default, so always pass **`-x c`** to compile them as C. Programs that use `math.h` (for example `Q29`) also need **`-lm`** at the end.
-
-<details>
-<summary><b>Build every program at once</b> (click to expand)</summary>
-
-<br/>
-
-```bash
-mkdir -p build
-for f in $(git ls-files '*.C' '*.c'); do
-  out="build/$(basename "${f%.*}")"
-  if gcc -x c -std=c11 "$f" -o "$out" -lm 2>/dev/null; then
-    echo "built    $f"
-  else
-    echo "skipped  $f  (notes file or placeholder)"
-  fi
-done
-
-# The C++ linked list
-g++ -std=c++17 Linked_List/Linked_List.cpp -o build/Linked_List_cpp
-```
-
-A handful of files are intentionally **notes only** and are skipped by this script: `Q07`, `Q11`, `Q43`, `Q50.1` and `Q61.0` contain explanations written inside the source, and `Q24` to `Q26` are empty homework placeholders.
-
-</details>
-
-<details>
-<summary><b>Files that read or write data files</b></summary>
-
-<br/>
-
-| Program | File used | Mode |
-|---|---|---|
-| [`Q61.1`](Q61.1_FileIO_read_int_from_file.C) | `test.txt` | reads 5 integers |
-| [`Q62`](Q62_FileIO_input_student_info.C) | `student.txt` | writes |
-| [`Q63`](Q63_FileIO_store_odd_numbers.C) | `text.txt` | writes |
-| [`Q64`](Q64_FileIO_sum_of_numbers_in_file.C) | `test.txt` | reads two numbers, then overwrites with their sum |
-
-Create `test.txt` in the folder you run the program from before trying `Q61.1` or `Q64`:
-
-```bash
-echo "4 8 15 16 23" > test.txt
-```
-
-</details>
 
 ---
 
