@@ -9,18 +9,6 @@ Small programs that mimic real firmware tasks: decoding bit packed protocol fram
 | [32 bit Packet Tracer](#32-bit-packet-tracer) | [`32bit_Packet_tracing.C`](32bit_Packet_tracing.C) | Shift and mask decoding, stateful reassembly, out of order packets |
 | [Washing Machine Drum Velocity Control](#washing-machine-drum-velocity-control) | [`Washing_Machine_Drum_Velocity.C`](Washing_Machine_Drum_Velocity.C) | `volatile` register access, signed math, saturation limits |
 
-## Build and Run
-
-```bash
-cd Simulated_Embedded_Examples
-
-gcc -x c -std=c11 -Wall 32bit_Packet_tracing.C -o packet_tracer && ./packet_tracer
-gcc -x c -std=c11 -Wall Washing_Machine_Drum_Velocity.C -o drum_velocity && ./drum_velocity
-```
-
-> [!NOTE]
-> These files use an uppercase `.C` extension, which GCC and Clang treat as C++ by default. The `-x c` flag makes them compile as C.
-
 ---
 
 ## 32 bit Packet Tracer
