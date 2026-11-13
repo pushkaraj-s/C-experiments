@@ -22,7 +22,6 @@
 * [Learning Roadmap](#learning-roadmap)
 * [Topic Explorer](#topic-explorer)
 * [Cheat Sheets](#cheat-sheets)
-* [Progress Tracker](#progress-tracker)
 * [Repository Structure](#repository-structure)
 
 ---
@@ -326,25 +325,6 @@ void _swap(int *a, int *b) { int t = *a; *a = *b; *b = t; } // changes the calle
 See [`Q38_Pointers_swap_numbers.C`](Q38_Pointers_swap_numbers.C) and [`Q39_Poniters_address_of_pointer.C`](Q39_Poniters_address_of_pointer.C).
 
 </details>
-
----
-
-## Progress Tracker
-
-* [x] Basics, operators and conditionals
-* [x] Loops
-* [x] Functions and recursion
-* [x] Pointers
-* [x] Arrays
-* [x] Strings
-* [x] Structures
-* [x] File I/O
-* [x] Dynamic memory allocation
-* [x] Linked list (C and C++)
-* [x] Circular queue
-* [x] Bit manipulation basics
-* [x] Simulated embedded examples
-* [ ] Homework questions Q24 to Q26
 
 ---
 
