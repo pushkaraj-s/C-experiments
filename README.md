@@ -576,8 +576,7 @@ Total Nodes = 4
 | `realloc` | `realloc(ptr, newSize)` | Only the old part is kept | Growing or shrinking a block |
 | `free` | `free(ptr)` | | Always release what you allocate |
 
-> [!IMPORTANT]
-> Always check the returned pointer for `NULL` before using it, and assign the result of `realloc` to a temporary pointer first so the original block is not lost if it fails.
+> **Important:** Always check the returned pointer for `NULL` before using it, and assign the result of `realloc` to a temporary pointer first so the original block is not lost if it fails.
 
 </details>
 
