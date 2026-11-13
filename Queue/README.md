@@ -22,14 +22,7 @@ A fixed capacity FIFO built on an array. When the rear index reaches the end, it
 | `pop()` | `front = (front + 1) % capacity` | Reject if `size == 0` |
 | `front()` | read `arr[front]` | Queue must not be empty |
 
-## Build and Run
-
-```bash
-cd Queue
-
-gcc -std=c11 -Wall Circular_Queue.c -o circular_queue && ./circular_queue
-gcc -std=c11 -Wall Circular_Queue_Practice.c -o circular_queue_practice && ./circular_queue_practice
-```
+## Sample Output
 
 <details>
 <summary><b>Show sample output (<code>Circular_Queue.c</code>)</b></summary>
