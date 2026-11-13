@@ -19,14 +19,7 @@ The same singly linked list written twice, which makes a nice side by side compa
 | `push_back` | Walks the list, O(n) | Uses `tail`, O(1) |
 | Extras | `count_nodes()` | `insert(val, pos)`, `search(key)` |
 
-## Build and Run
-
-```bash
-cd Linked_List
-
-gcc -std=c11 -Wall Linked_List.c -o linked_list_c && ./linked_list_c
-g++ -std=c++17 -Wall Linked_List.cpp -o linked_list_cpp && ./linked_list_cpp
-```
+## Sample Output
 
 <details>
 <summary><b>Show sample output (C version)</b></summary>
