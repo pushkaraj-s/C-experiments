@@ -6,6 +6,7 @@
 
 #define MAX_NAME 256
 #define TABLE_SIZE 10
+#define DELETED_NODE (person*)(0xFFFFFFFFFFFFUL)
 
 typedef struct{
     char name[MAX_NAME];
@@ -36,6 +37,8 @@ void print_table(){
     for (int i=0; i < TABLE_SIZE; i++){
         if(hash_table[i] == NULL){
             printf("\t%i\t---\n", i);
+        } else if (hash_table[i] == DELETED_NODE) {
+            printf("\t%i\t<deleted>\n", i);
         } else {
             printf("\t%i\t%s\n", i, hash_table[i]->name);
         }
@@ -46,32 +49,50 @@ void print_table(){
 bool hash_table_insert(person *p){
     if(p == NULL) return false;
     int index = hash(p->name);
-    if(hash_table[index] != NULL){
-        return false;
+    for (int i=0; i < TABLE_SIZE; i++){
+        int try = (i + index) % TABLE_SIZE;
+        if(hash_table[try] == NULL || hash_table[try] == DELETED_NODE){
+            hash_table[try] = p;
+            return true;
+        }
     }
-    hash_table[index] = p;
-    return true;
+   
+    return false;
 }
 
 // Find person in the table by their name
 person* hash_table_lookup (char *name){
     int index = hash(name);
-    if(hash_table[index] != NULL && strcmp(hash_table[index]->name, name) == 0){
-        return hash_table[index];
-    } else {
-        return NULL;
+    for (int i=0; i < TABLE_SIZE; i++){
+        int try = (index + i) % TABLE_SIZE;
+        if(hash_table[try] == NULL){
+            return false; // Not here
+        }
+        if(hash_table[try] == DELETED_NODE) continue;
+        if(strcmp(hash_table[try]->name, name) == 0){
+        return hash_table[try];
+        }
     }
+    
+    return NULL;
 }
 
 person* hash_table_delete(char *name){
     int index = hash(name);
-    if(hash_table[index] != NULL && strcmp(hash_table[index]->name, name) == 0){
-        person* tmp = hash_table[index];
-        hash_table[index] = NULL;
+    for (int i=0; i < TABLE_SIZE; i++){
+        int try = (index + i) % TABLE_SIZE;
+        if(hash_table[try] == NULL){
+            return NULL; // Not here
+        }
+        if(hash_table[try] == DELETED_NODE) continue;
+        if(strcmp(hash_table[try]->name, name) == 0){
+        person* tmp = hash_table[try];
+        hash_table[try] = DELETED_NODE;
         return tmp;
-    } else {
-        return NULL;
+        }
     }
+    
+    return NULL;
 }
 
 int main(){
@@ -84,12 +105,20 @@ int main(){
     person kate = {.name="Kate", .age= 27};
     person mpho = {.name="Mpho", .age= 22};
     person raj = {.name="Raj", .age= 31};
+    person sarah = {.name="Sarah", .age= 16};
+    person robert = {.name="Robert", .age= 45};
+    person eliza = {.name="Eliza", .age= 52};
+    person edna = {.name="Edna", .age= 11};
     
     
     hash_table_insert(&jacob);
     hash_table_insert(&kate);
     hash_table_insert(&mpho);
     hash_table_insert(&raj);
+    hash_table_insert(&sarah);
+    hash_table_insert(&robert);
+    hash_table_insert(&eliza);
+    hash_table_insert(&edna);
     print_table();
     
     person* tmp = hash_table_lookup("Mpho");
@@ -99,6 +128,12 @@ int main(){
     } else {
         printf("Found %s.\n", tmp->name);
     }
+    
+    hash_table_delete("Mpho");
+    print_table();
+    
+    hash_table_delete("Raj");
+    print_table();
     
     /***
     printf("Jacob => %u\n", hash("Jacob"));
