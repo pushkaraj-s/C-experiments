@@ -32,6 +32,7 @@ void init_hash_table(){
 }
 
 void print_table(){
+    printf("Start\n");
     for (int i=0; i < TABLE_SIZE; i++){
         if(hash_table[i] == NULL){
             printf("\t%i\t---\n", i);
@@ -39,6 +40,7 @@ void print_table(){
             printf("\t%i\t%s\n", i, hash_table[i]->name);
         }
     }
+    printf("END\n\n");
 }
 
 bool hash_table_insert(person *p){
@@ -49,6 +51,27 @@ bool hash_table_insert(person *p){
     }
     hash_table[index] = p;
     return true;
+}
+
+// Find person in the table by their name
+person* hash_table_lookup (char *name){
+    int index = hash(name);
+    if(hash_table[index] != NULL && strcmp(hash_table[index]->name, name) == 0){
+        return hash_table[index];
+    } else {
+        return NULL;
+    }
+}
+
+person* hash_table_delete(char *name){
+    int index = hash(name);
+    if(hash_table[index] != NULL && strcmp(hash_table[index]->name, name) == 0){
+        person* tmp = hash_table[index];
+        hash_table[index] = NULL;
+        return tmp;
+    } else {
+        return NULL;
+    }
 }
 
 int main(){
@@ -67,6 +90,15 @@ int main(){
     hash_table_insert(&kate);
     hash_table_insert(&mpho);
     hash_table_insert(&raj);
+    print_table();
+    
+    person* tmp = hash_table_lookup("Mpho");
+    
+    if(tmp == NULL){
+        printf("Not found!\n");
+    } else {
+        printf("Found %s.\n", tmp->name);
+    }
     
     /***
     printf("Jacob => %u\n", hash("Jacob"));
